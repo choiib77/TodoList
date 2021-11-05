@@ -16,11 +16,6 @@
       "id": 4
     },
     {
-      "subject": "졸리다",
-      "completed": false,
-      "id": 5
-    },
-    {
       "subject": "수정햇영",
       "completed": false,
       "body": "ㅇㅇ아하하하",
@@ -31,6 +26,12 @@
       "completed": false,
       "body": "내용도 추가",
       "id": 7
+    },
+    {
+      "subject": "국화빵",
+      "completed": false,
+      "body": "아부지가 사준 국화빵 냠냠",
+      "id": 8
     }
   ]
 }

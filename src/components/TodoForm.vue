@@ -1,9 +1,13 @@
 <template>
-    <Toast 
-    v-if="showToast" 
-    :message="toastMassage" 
-    :type="toastAlertType"
-    />
+    <!-- transition 효과 -->
+    <transition name="fade-down">
+        <Toast 
+        v-if="showToast" 
+        :message="toastMassage" 
+        :type="toastAlertType"
+        />
+    </transition>
+    
     <div v-if="loading">
         Loading...
     </div>
@@ -22,6 +26,9 @@
             class="form-control"
             >
             </div>
+            <div v-if="subjectError" class="text-red">
+                {{subjectError}}
+            </div>
         </div>
 
     <!-- 내용을 수정.. 편집하는 form
@@ -30,19 +37,19 @@
         v-if="editing"
         class="col-6"
         >
-            <div class="form-group">
+        <div class="form-group">
             <label>Status</label>
             <div>
-            <button 
-            class="btn"
-            :class="todo.completed ? 'btn-success': 'btn-danger'"
-            type="button"
-            @click="toggleTodoStatus"
-            >
-                {{todo.completed ?'Completed' :'Incompeted'}}
-            </button>
+                <button 
+                class="btn"
+                :class="todo.completed ? 'btn-success': 'btn-danger'"
+                type="button"
+                @click="toggleTodoStatus"
+                >
+                    {{todo.completed ?'Completed' :'Incompeted'}}
+                </button>
             </div>
-            </div>
+        </div>
         </div>
 
         <!-- 내용을 입력하는 장소 -->
@@ -55,6 +62,9 @@
                     cols="30" 
                     rows="10"
                 ></textarea>
+            </div>
+            <div v-if="bodyError" class="text-danger">
+                {{bodyError}}
             </div>
         </div>
     </div>
@@ -103,6 +113,12 @@ import { useToast } from '@/composables/toast';
             completed : false,
             body: ''
         });   // 계속 변하는 데이터
+
+        // 내용의 빈것이 있는지를 확인
+        const subjectError = ref('');
+        const bodyError = ref('');
+
+
         const originalTodo = ref(null); // 원본 보관용
 
         const loading = ref(true);
@@ -148,6 +164,16 @@ import { useToast } from '@/composables/toast';
 
         const onSave = async () => {
             try{
+                subjectError.value='';
+                bodyError.value='';
+                if(!todo.value.subject){
+                    subjectError.value = '제목을 입력하세요.'
+                    return;
+                }
+                if(!todo.value.body){
+                    bodyError.value = '내용을 입력하세요.'
+                    return;
+                }
                 let res;
                 const data = {
                 subject : todo.value.subject,
@@ -174,7 +200,13 @@ import { useToast } from '@/composables/toast';
             }
             
         }
-        getTodo();
+
+        // editing == true
+        if(props.editing){
+            getTodo();
+        }else{
+            loading.value =false;
+        }
 
         return {
             todo,
@@ -183,6 +215,8 @@ import { useToast } from '@/composables/toast';
             moveToListPage,
             onSave,
             todoUpdated,
+            subjectError,
+            bodyError,
             
             showToast,
             toastMassage,
@@ -194,5 +228,27 @@ import { useToast } from '@/composables/toast';
 </script>
 
 <style>
+    .text-red {
+        color: red;
+    }
+</style>
+<style scoped>
+    .text-danger {
+        color: blue;
+    }
+    .fade-down-enter-acitve,
+    .fade-down-leave-active {
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
 
+    .fade-down-enter-from,
+    .fade-down-leave-to {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    .fade-down-enter-to,
+    .fade-down-leave-from{
+        opacity: 1;
+        transform: translateY(0);
+    }
 </style>
