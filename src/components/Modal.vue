@@ -4,30 +4,21 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-            Todo 삭제
+            <!-- Delete Todo -->
+            <slot name="title"></slot>
             </h5>
         <button type="button" class="close">
           <span @click="onClose">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <p>정말 삭제하겠습니까?</p>
+        <p>
+          <slot name="body"></slot>
+        </p>
       </div>
       <div class="modal-footer">
-        <button 
-            type="button" 
-            class="btn btn-secondary" 
-            @click="onClose"
-        >
-            닫기
-        </button>
-        <button 
-            type="button" 
-            class="btn btn-danger"
-            @click="onDelete"
-            >
-                삭제하기
-            </button>
+        <slot name="footer"></slot>
+       
       </div>
     </div>
   </div>
@@ -37,15 +28,11 @@
 <script>
 export default {
     setup(props,{emit}){
-        const onClose = () => {
-            emit('close');
-        }
-        const onDelete = () => {
-            emit('delete');
-        }
+       const onClose = () => {
+                emit('close');
+            }
         return {
-            onClose,
-            onDelete
+          onClose
         }
     }
 }

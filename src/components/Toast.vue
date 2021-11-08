@@ -1,19 +1,19 @@
 <template>
     <div 
-    class="alert toast-box" 
-    :class="`alert-${type}`"
-    role="alert"
+        class="alert toast-box" 
+        :class="`alert-${type}`"
+        role="alert"
     >
-       {{message}}
+        {{ message }}
     </div>
 </template>
 
 <script>
     export default {
-        props : {
-            message : {
+        props: {
+            message: {
                 type : String,
-                required : true
+                required: true
             },
             type: {
                 type: String,
