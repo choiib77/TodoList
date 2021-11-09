@@ -34,7 +34,7 @@ export default {
     setup(props,{emit}){
         const onInput = (event) => {
             // console.log(event.target.value);
-            emit('update-subject',event.target.value);
+            emit('update:subject',event.target.value);
         }
         return {
             onInput

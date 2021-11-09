@@ -25,9 +25,8 @@
                <Input 
                 :error="subjectError"
                 label="Subject"
-                :subject="todo.subject"
-                @update-subject="updateTodoSubject"
-               />
+                v-model:subject="todo.subject"                
+                />
             </div>
 
             <!-- 
@@ -86,12 +85,14 @@
 
 <script>
     import {useRoute,useRouter} from 'vue-router';
-    import axios from 'axios';
+    import axios from '@/axios';
     import {ref, computed} from 'vue';
     import _ from 'loadsh';
     import Toast from '@/components/Toast.vue'
     import { useToast} from '@/composables/toast'
     import Input from '@/components/Input.vue'
+
+    import { useStore } from 'vuex'
 
     export default {
         components: {
@@ -107,6 +108,12 @@
         },
 
         setup(props) {
+            // vuex.state 출력
+            const store = useStore();
+            console.log(store.state); 
+
+
+
             const route = useRoute();
             const router = useRouter();
             const todo = ref({
@@ -134,7 +141,7 @@
                 loading.value = true;
                 try {
                     
-                    const res = await axios.get(`http://localhost:3000/todo/${userId}`);
+                    const res = await axios.get(`todo/${userId}`);
                     // console.log(res.data);
                     todo.value = {...res.data};
                     originalTodo.value = {...res.data};
@@ -159,17 +166,12 @@
                 router.push({
                     name: 'Todos'
                 });
-            }
+            }           
 
-            const updateTodoSubject = (newValue) => {
-                todo.value.subject = newValue;
-            }
             const onSave = async () => {
                 try {
-
                     subjectError.value = '';
                     bodyError.value = '';
-
                     if(!todo.value.subject) {
                         subjectError.value = '제목을 입력하세요.'
                         return;
@@ -187,16 +189,25 @@
                     }
 
                     if(props.editing) {
-                       res = await axios.put(`http://localhost:3000/todo/${userId}`, data);
+                       res = await axios.put(`todo/${userId}`, data);
                         // 새롭게 데이터를 갱신한다.
                         originalTodo.value = {...res.data};
                         triggerToast("업데이트가 되었습니다");
                     }else{
-                       res = await axios.post('http://localhost:3000/todo', data)
+                       res = await axios.post('todo', data)
                         triggerToast("추가 되었습니다");
                         todo.value.subject = '';
                         todo.value.body = '';
+
+                        // 목록으로 이동하기
+                        router.push({
+                            name: 'Todos'
+                        });
+
                     } 
+
+
+
 
                 } catch (error) {
                     console.log(error);
@@ -218,10 +229,10 @@
                 loading,
                 toggleTodoStatus,
                 moveToListPage,
-                updateTodoSubject,
+                
                 onSave,
                 todoUpdated,
-                
+
                 subjectError,
                 bodyError,
 
