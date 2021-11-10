@@ -27,29 +27,26 @@
   <div class="container">
     <router-view></router-view>
   </div>
-
-  <Toast
-    v-if="showToast"
-    :message="toastMessage"
-    :type="toastAlertType"
-  >    
-  </Toast>
-
+  <transition name="slide">
+    <Toast
+      v-if="showToast"
+      :message="toastMessage"
+      :type="toastAlertType"
+    >    
+    </Toast>
+  </transition>
 </template>
 
 <script>
   import Toast from '@/components/Toast.vue'
   import { useToast } from '@/composables/toast'
-  import { useStore } from 'vuex'
 
   export default {
     components : {
       Toast
     }, 
     setup(){
-      // vuex.state 출력
-      const store = useStore();
-      console.log(store.state);
+    
 
       const {
           showToast, 
@@ -69,6 +66,19 @@
   }
 </script>
 
-<style>
-
+<style scoped>
+    .slide-enter-active,
+    .slide-leave-active {
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .slide-enter-from, 
+    .slide-leave-to {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    .slide-enter-to,
+    .slide-leave-from {
+        opacity: 1;
+        transform: translateY(0);
+    }
 </style>

@@ -62,18 +62,13 @@
       </ul>
     </nav>
   </div>
-    <Toast 
-    v-if="showToast" 
-    :message="toastMassage" 
-    :type="toastAlertType"
-    />
+   
 </template>
 
 <script>
   import {computed, ref, watch} from 'vue';
   import TodoList from '@/components/TodoList.vue';
   import axios from '@/axios';
-  import Toast from '@/components/Toast.vue';
   import { useToast } from '@/composables/toast';
   import { useRouter } from 'vue-router';
 
@@ -81,8 +76,7 @@
 
     components: {
       // TodoSimpleForm,
-      TodoList,
-      Toast
+      TodoList
     },
     setup() {
 

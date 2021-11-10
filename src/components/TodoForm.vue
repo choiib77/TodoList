@@ -1,15 +1,5 @@
 <template>
     <!-- Transition 효과 -->
-    <transition name="fade-down">
-        <Toast 
-            v-if="showToast" 
-            :message="toastMessage" 
-            :type="toastAlertType" 
-        />
-    </transition>
-    
-
-
 
     <div v-if="loading">
         Loading...
@@ -88,15 +78,12 @@
     import axios from '@/axios';
     import {ref, computed} from 'vue';
     import _ from 'loadsh';
-    import Toast from '@/components/Toast.vue'
     import { useToast} from '@/composables/toast'
     import Input from '@/components/Input.vue'
 
-    import { useStore } from 'vuex'
 
     export default {
         components: {
-            Toast,
             Input
         },
 
@@ -108,11 +95,6 @@
         },
 
         setup(props) {
-            // vuex.state 출력
-            const store = useStore();
-            console.log(store.state); 
-
-
 
             const route = useRoute();
             const router = useRouter();
@@ -251,21 +233,6 @@
 <style scoped>
     .text-danger {
         color: blue;
-    }
-
-    .fade-down-enter-active,
-    .fade-down-leave-active {
-        transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .fade-down-enter-from, 
-    .fade-down-leave-to {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    .fade-down-enter-to,
-    .fade-down-leave-from {
-        opacity: 1;
-        transform: translateY(0);
     }
 
 </style>

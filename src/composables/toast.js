@@ -1,32 +1,24 @@
-import {ref, onUnmounted} from 'vue';
+import {computed} from 'vue';
+import { useStore } from 'vuex';
+
 
 export const useToast = () => {
-    // Toast 관련
-    let showToast = ref(false);
-    let toastMessage = ref('');
-    let toastAlertType = ref(''); 
-    let timeout = ref(null);       
-
-    // 마지막 메모리 정리를 할 수 있는 시간입니다.
-    onUnmounted(() => {
-      clearTimeout(timeout.value);
-    });
+    const store = useStore();
+    const toasts = computed(() => store.state.toast.toasts);
+    // // Toast 관련
+    // let showToast = computed(()=>store.state.toast.showToast);
+    // let toastMessage = computed(()=>store.getters['toast/toastMessageAdd']);
+    // let toastAlertType = computed(()=>store.state.toastAlertType);    
 
     const triggerToast = (message, type="success") => {
-      showToast.value = true;
-      toastMessage.value = message;
-      toastAlertType.value = type;
-      timeout.value = setTimeout(() => {        
-        showToast.value = false;
-        toastMessage.value = '';
-        toastAlertType.value = '';
-      }, 5000);
+      store.dispatch('toast/triggerToast',message,type);
     }
 
     return {
-        showToast, 
-        toastMessage,
-        toastAlertType,
+        // showToast, 
+        // toastMessage,
+        // toastAlertType,
+        toasts,
         triggerToast
     }
 }
