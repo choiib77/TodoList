@@ -1,25 +1,9 @@
 export default {
     namespaced: true,
     state: {
-        toasts: [],
-        // showToast : false,
-        // toastMessage : '',
-        // toastAlertType : '',
-        // timeout : null,        
+        toasts: [],    
     },
     mutations: {
-        // UPDATE_TOAST_STATUS (state, payload){ 
-        //     state.showToast = payload;          
-        // },
-        // UPDATE_TOAST_MESSAGE (state, payload) {
-        //     state.toastMessage = payload;        
-        // },
-        // UPDATE_TOAST_ALERT_TYPE (state, payload) {    
-        //     state.toastAlertType = payload;               
-        // },
-        // UPDATE_TOAST_TIMEOUT (state, payload) {     
-        //     state.timeout = payload;                    
-        // },
 
         // toast 추가 해준다.
         ADD_TOAST (state, payload) {
@@ -32,21 +16,17 @@ export default {
 
     },
     actions: {
-        triggerToast ( { commit },  message, type="success") {
-            // commit('UPDATE_TOAST_STATUS', true);
-            // commit('UPDATE_TOAST_MESSAGE', message);
-            // commit('UPDATE_TOAST_ALERT_TYPE', type);
+        triggerToast ( { commit }, payload) {
+            
             commit('ADD_TOAST', { 
-                message, 
-                type
+                id: Date.now(),
+                message:payload.message, 
+                type:payload.type
             });
 
-            setTimeout(() => {                
-                // commit('UPDATE_TOAST_STATUS', false);
-                // commit('UPDATE_TOAST_MESSAGE', '');
-                // commit('UPDATE_TOAST_ALERT_TYPE', '');
+            setTimeout(() => {
                 commit("REMOVE_TOAST");
-            }, 10000);
+            }, 5000);
             
         }
     },
